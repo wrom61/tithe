@@ -1,0 +1,9 @@
+input::placeholder {
+  font-size: 12px;
+  font-style: italic;
+}
+
+.btn-close {
+  font-size: 9px;
+  top: -8px !important;
+}
