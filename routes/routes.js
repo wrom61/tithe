@@ -1,20 +1,23 @@
 const express = require('express')
-const controller = require('../controllers/controller')
+const controllerRegistration = require('../controllers/controllerRegistration')
+const controllerLogin = require('../controllers/controllerLogin')
 const router = express.Router()
 
 
 router.get('/', (req, res) => {
-  res.render('index', {title: 'Tithe'})
+  res.render('index', {title: 'Dary ADS'})
 })
 
 router.get('/login', (req, res) => {
-  res.render('login', {title: 'Login'})
+  res.render('login')
 })
+
+router.post('/login', controllerLogin.loginValidation)
 
 router.get('/register', (req, res) => {
-  res.render('register', {title: 'Register'})
+  res.render('register')
 })
 
-router.post('/register', controller.validation)
+router.post('/register', controllerRegistration.validation, controllerRegistration.register)
 
 module.exports = router

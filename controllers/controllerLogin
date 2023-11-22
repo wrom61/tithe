@@ -1,0 +1,53 @@
+// const mysql = require('mysql');
+const db = require('./controllerDbConnection')
+// const jwt = require('jsonwebtoken')
+const bcrypt = require('bcryptjs')
+
+exports.loginValidation = async (req, res) => {
+  let alerts = []
+  try {
+    const {username, password} = req.body
+      console.log(username, password);
+      
+      if(!username || !password) {
+      alerts.push('Proszę wypełnić wszystkie pola logowania!')
+      return res.status(400).render('login', {
+        alerts
+      })
+    }
+      db.query('SELECT * FROM users WHERE username = ?', [username], async (error, result) => {
+        console.log(result);
+        
+        if (error || result.length === 0) {
+        alerts.push('Nazwa lub hasło jest niepoprawne1!')  
+        return res.render('login', {
+          alerts
+        })  
+      }
+         else {
+         if (!(await bcrypt.compare(password, result[0].password))) {
+          console.log('czy5');
+          
+          alerts.push('Nazwa lub hasło jest niepoprawne3!')
+          res.status(401).render('login', {
+            alerts
+          })
+        } else {
+          console.log('czy3');
+          
+          console.log('Czy tu dotarłem?');
+          
+          return res.render('transaction', {
+          test: 'test'
+          })
+        }
+      }
+          })
+
+  } catch (error) {
+    alerts.push('Problem z połączeniem z bazą danych5')  
+    return res.render('login', {
+      alerts
+    })  
+  }
+}
